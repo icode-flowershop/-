@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.su.beloving.home.dao.FlowerDao">
+    <!--   使用insert，update，delete，select标签写Sql-->
+
+    <sql id="Base_Column_List">
+        id,img,fname,price,sold,says,material,packaging,inventory,deleted
+    </sql>
+
+    <select id="select" resultType="com.su.beloving.home.entity.Flower">
+        select <include refid="Base_Column_List"/>
+        from flower
+        where (material like '%${message}%'
+            or packaging like '%${message}%'
+            or fname like '%${message}%'
+            or says like '%${message}%')
+            and deleted=0
+    </select>
+
+    <select id="selectAll" resultType="com.su.beloving.home.entity.Flower">
+        select <include refid="Base_Column_List"/> from flower where deleted=0
+    </select>
+
+    <select id="selectOne" resultType="com.su.beloving.home.entity.Flower">
+        select <include refid="Base_Column_List"/>
+        from flower
+        where id=#{id} and deleted=0
+    </select>
+
+    <insert id="insertOne"  useGeneratedKeys="true">
+        insert into flower (img,fname,price,sold,says,material,packaging,inventory)
+        values (#{img,jdbcType=VARCHAR}, #{fname,jdbcType=VARCHAR},#{price,jdbcType=INTEGER}, #{sold,jdbcType=INTEGER},
+                #{says,jdbcType=VARCHAR},#{material,jdbcType=VARCHAR},#{packaging,jdbcType=VARCHAR},
+                #{inventory,jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateOne" >
+        update flower set
+        fname=#{fname,jdbcType=VARCHAR},
+        price=#{price,jdbcType=INTEGER},sold=#{sold,jdbcType=INTEGER},
+        says=#{says,jdbcType=VARCHAR},material=#{material,jdbcType=VARCHAR},
+        packaging=#{packaging,jdbcType=VARCHAR},inventory=#{inventory,jdbcType=INTEGER}
+        where id=#{id,jdbcType=INTEGER};
+    </update>
+
+    <update id="deleteById">
+        update flower set deleted=1 where id=#{id}
+    </update>
+
+</mapper>

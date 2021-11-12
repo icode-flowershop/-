@@ -3,10 +3,12 @@ package com.su.beloving.login.dao;
 import com.su.beloving.login.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface UserDao {
 
-    int insert(User record);
+    int insert(User user);
 
     int insertSelective(User record);
 
@@ -16,7 +18,13 @@ public interface UserDao {
 
     int updateByPrimaryKey(User record);
 
-    int selectup(String username,String password);
+    User selectup(String username,String password);
 
-    int selectUsername(String username);
+    User selectUsername(String username);
+
+    int deleteById(int id);
+
+    List<User> selectAll();
+
+    List<User> select(String message);
 }

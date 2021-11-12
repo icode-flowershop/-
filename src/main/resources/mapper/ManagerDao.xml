@@ -1,33 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.su.beloving.login.dao.ManagerDao">
-  <resultMap id="BaseResultMap" type="com.su.beloving.login.entity.Manager">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="deleted" jdbcType="INTEGER" property="deleted" />
-  </resultMap>
+
   <sql id="Base_Column_List">
-    id, username, `password`, phone, email, deleted
+    id, username, password, phone, email, deleted
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from manager
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from manager
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.su.beloving.login.entity.Manager" useGeneratedKeys="true">
-    insert into manager (username, `password`, phone, 
-      email, deleted)
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER})
-  </insert>
+
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.su.beloving.login.entity.Manager" useGeneratedKeys="true">
     insert into manager
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -96,13 +79,20 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectup" resultType="java.lang.Integer">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.su.beloving.login.entity.Manager" useGeneratedKeys="true">
+    insert into manager (username, password, phone,
+                         email, deleted)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+            #{email,jdbcType=VARCHAR}, 0)
+  </insert>
+
+  <select id="selectup" resultType="com.su.beloving.login.entity.Manager">
     select <include refid="Base_Column_List"/> from manager
-    where user_name=#{username} and pass_word=#{password} and deleted=0
+    where username=#{username} and password=#{password} and deleted=0
   </select>
 
-  <select id="selectUsername" resultType="java.lang.Integer">
+  <select id="selectUsername" resultType="com.su.beloving.login.entity.Manager">
     select <include refid="Base_Column_List"/> from manager
-    where user_name=#{username} and deleted=0
+    where username=#{username} and deleted=0
   </select>
 </mapper>
