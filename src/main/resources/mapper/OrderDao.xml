@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.su.beloving.dao.OrderDao">
+    <!--   使用insert，update，delete，select标签写Sql-->
+    <sql id="Base_Column_List">
+        id,userId,flowerId,money,oaddress,pay
+    </sql>
+
+    <sql id="flower">
+        id,img,fname,price,sold,says,material,packaging,inventory
+    </sql>
+
+    <sql id="user">
+        id, username,password, phone
+    </sql>
+
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into orders (userId,flowerId,money,oaddress,pay)
+        values (#{userId,jdbcType=INTEGER}, #{flowerId,jdbcType=INTEGER},
+                #{money,jdbcType=INTEGER},#{oaddress,jdbcType=VARCHAR},
+                #{pay,jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateOne" >
+        update orders
+        set  userId=#{userId,jdbcType=INTEGER},
+             flowerId=#{flowerId,jdbcType=INTEGER},money=#{money,jdbcType=INTEGER},
+             oaddress=#{oaddress,jdbcType=VARCHAR},pay=#{pay,jdbcType=INTEGER}
+        where id=#{id,jdbcType=INTEGER};
+    </update>
+
+    <select id="queryFlower" resultType="com.su.beloving.po.Flower">
+        select <include refid="flower"/>
+        from flower
+        where id=#{flowerId} and deleted=0
+    </select>
+
+    <select id="queryUser" resultType="com.su.beloving.po.User">
+        select <include refid="user"/>
+        from user
+        where id=#{userId} and deleted=0
+    </select>
+
+    <select id="selectAll" resultType="com.su.beloving.po.Order">
+        select <include refid="Base_Column_List"/>
+        from orders
+        where deleted=0
+    </select>
+
+    <select id="select" resultType="com.su.beloving.po.Order">
+        select <include refid="Base_Column_List"/> from orders
+        where (user like '%${message}%'
+        or goods like '%${message}%'
+        or money like '%${message}%'
+        or pay like '%${message}%'
+        or oaddress like '%${message}%')
+        and deleted=0
+    </select>
+
+    <select id="selectById" resultType="com.su.beloving.po.Order">
+        select <include refid="Base_Column_List"/>
+        from orders
+        where id=#{id} and deleted=0
+    </select>
+
+    <update id="deleteOne">
+        update orders
+        set deleted=1
+        where id=#{id}
+    </update>
+    
+    <update id="updatePay">
+        update orders
+        set pay=1
+        where id=#{id}
+    </update>
+
+    <select id="selectByUserId" resultType="com.su.beloving.po.Order">
+        select <include refid="Base_Column_List"/> from orders
+        where userId=#{userId} and deleted=0
+    </select>
+
+
+</mapper>
